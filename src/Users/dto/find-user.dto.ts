@@ -1,0 +1,3 @@
+class FindUserDto {
+    email: string;
+}
