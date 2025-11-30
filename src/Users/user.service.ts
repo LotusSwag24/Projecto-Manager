@@ -16,22 +16,24 @@ export class UserService {
             const hash = await bcrypt.hash(body.password, salt);
 
             const newUser = this.userRepository.create({
-                name: body.name,
                 password: hash,
-                email: body.email
+                email: body.email,
+                roleId: body.roleId
             });
+            await this.userRepository.save(newUser);
             const {password, ...result} = newUser;
             return result;
         }catch(error){
 
         }
     }
-    findUser(email: string){
+    async findUser(email: string){
         try{
-            const user = this.userRepository.findOne({
+            const user = await this.userRepository.findOne({
                 where: {
-                    email: email
-                    }
+                    email: email,
+                    },
+                relations: ['role']
                 })
             if(!user){ return null; } return user;
         }catch(error){

@@ -12,7 +12,9 @@ export class Task {
     description: string;
     @Column()
     status: boolean;
-
+    @Column()
+    userId: number;
+    
     @ManyToOne(() => Project, (project) => project.task)
     projects: Project;
     @ManyToOne(() => User, (user) => user.tasks)
