@@ -5,6 +5,7 @@ import { Repository } from "typeorm/repository/Repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from 'bcrypt';
 
+
 @Injectable()
 
 export class UserService {
@@ -24,7 +25,7 @@ export class UserService {
             const {password, ...result} = newUser;
             return result;
         }catch(error){
-
+            throw new Error(`Error al crear el usuario: ${error.message}`);
         }
     }
     async findUser(email: string){
