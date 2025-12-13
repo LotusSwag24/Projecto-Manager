@@ -32,7 +32,6 @@ $ npm install
 ```
 
 ## Compile and run the project
-<p>Para instalar las dependencias del proyectos corre el siguiente comando</p>
 ```bash
 # development
 $ npm run start
