@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { RolesGuard } from "src/auth/guards/roles.guard";
 import { CreateProjectDto } from "./dto/create-project.dto";
@@ -40,7 +40,7 @@ export class ProjectController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('ADMIN')
-    @Put('/deleteProject/:id')
+    @Delete('/deleteProject/:id')
     async deleteProject(id: number){
         return this.projectService.deleteProject(id);
     }

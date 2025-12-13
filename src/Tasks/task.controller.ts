@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, UseGuards } from "@nestjs/common";
 import { TaskService } from "./task.service";
 import { RolesGuard } from "src/auth/guards/roles.guard";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -26,11 +26,11 @@ export class TaskController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('SCRUM MASTER')
-    @Put('/deleteTask/:id')
+    @Delete('/deleteTask/:id')
     async deleteTask(id: number){
         return this.taskService.deleteTask(id);
     }
-    
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('SCRUM MASTER')
     @Get('/tasksByUser/:userId')
