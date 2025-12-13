@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Project } from "./project.entity";
 import { Repository } from "typeorm/repository/Repository";
@@ -32,7 +32,7 @@ export class ProjectService {
             await this.projectRepository.update(id, body);
             const updatedProject = await this.projectRepository.findOneBy({ id });
             if (!updatedProject) {
-                throw new Error('Proyecto no encontrado');
+                throw new NotFoundException('Proyecto no encontrado');
             }
             return updatedProject;
         }catch(error){
@@ -46,11 +46,23 @@ export class ProjectService {
                 where: { userId: userId }
             });
             if(!project){
-                throw new Error('No se encontraron proyectos para el usuario especificado');
+                throw new NotFoundException('No se encontraron proyectos para el usuario especificado');
             }
             return project;
         }catch(error){
             throw new Error(`Error al obtener el proyecto del usuario: ${error.message}`);
+        }
+    }
+
+    async deleteProject(id: number): Promise<{ message: string }> {
+        try{
+            const deleteResult = await this.projectRepository.delete(id);
+            if (deleteResult.affected === 0) {
+                throw new NotFoundException('Proyecto no encontrado');
+            }
+            return { message: 'Proyecto eliminado correctamente' };
+        }catch(error){
+            throw new Error(`Error al eliminar el proyecto: ${error.message}`);
         }
     }
 }

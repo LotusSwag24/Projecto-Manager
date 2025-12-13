@@ -37,4 +37,11 @@ export class ProjectController {
     async getProjectsByUser(userId: number){
         return this.projectService.getProjectByUser(userId);
     }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN')
+    @Put('/deleteProject/:id')
+    async deleteProject(id: number){
+        return this.projectService.deleteProject(id);
+    }
 }

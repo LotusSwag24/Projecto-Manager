@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Task } from "./task.entity";
@@ -23,7 +23,7 @@ export class TaskService {
             await this.taskRepository.update(id, body);
             const updatedTask = await this.taskRepository.findOneBy({ id });
             if (!updatedTask) {
-                throw new Error('Tarea no encontrada');
+                throw new NotFoundException('Tarea no encontrada');
             }
             return updatedTask;
         }
@@ -39,6 +39,18 @@ export class TaskService {
             });
         }catch(error){
             throw new Error(`Error al obtener las tareas del usuario: ${error.message}`);
+        }
+    }
+
+        async deleteTask(id: number): Promise<{ message: string }> {
+        try{
+            const deleteResult = await this.taskRepository.delete(id);
+            if (deleteResult.affected === 0) {
+                throw new NotFoundException('Tarea no encontrada');
+            }
+            return { message: 'Tarea eliminada correctamente' };
+        }catch(error){
+            throw new Error(`Error al eliminar la tarea: ${error.message}`);
         }
     }
 }

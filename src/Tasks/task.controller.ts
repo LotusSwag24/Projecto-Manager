@@ -26,6 +26,13 @@ export class TaskController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('SCRUM MASTER')
+    @Put('/deleteTask/:id')
+    async deleteTask(id: number){
+        return this.taskService.deleteTask(id);
+    }
+    
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('SCRUM MASTER')
     @Get('/tasksByUser/:userId')
     async getTasksByUser(userId: number){
         return this.taskService.getTaskByUser(userId);
