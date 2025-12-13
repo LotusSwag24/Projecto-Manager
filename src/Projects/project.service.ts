@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Project } from "./project.entity";
 import { Repository } from "typeorm/repository/Repository";
 import { CreateProjectDto } from "./dto/create-project.dto";
+import { UpdateProjectDto } from "./dto/update-project.dto";
 
 
 @Injectable()
@@ -23,6 +24,19 @@ export class ProjectService {
             return await this.projectRepository.find();
         }catch(error){
             throw new Error(`Error al obtener los proyectos: ${error.message}`);
+        }
+    }
+
+    async getUpdateProjectById(id: number, body: UpdateProjectDto): Promise<Project> {
+        try{
+            await this.projectRepository.update(id, body);
+            const updatedProject = await this.projectRepository.findOneBy({ id });
+            if (!updatedProject) {
+                throw new Error('Proyecto no encontrado');
+            }
+            return updatedProject;
+        }catch(error){
+            throw new Error(`Error al actualizar el proyecto: ${error.message}`);
         }
     }
 

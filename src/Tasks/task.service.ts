@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Task } from "./task.entity";
 import { CreateTaskDto } from "./dto/create-task.dto";
+import { UpdateTaskDto } from "./dto/update-task.dto";
 
 @Injectable()
 export class TaskService {
@@ -14,6 +15,20 @@ export class TaskService {
             return await this.taskRepository.save(newTask);
         }catch(error){
             throw new Error(`Error al crear la tarea: ${error.message}`);
+        }
+    }
+
+    async updateTask(id: number, body: UpdateTaskDto): Promise<Task> {
+        try{
+            await this.taskRepository.update(id, body);
+            const updatedTask = await this.taskRepository.findOneBy({ id });
+            if (!updatedTask) {
+                throw new Error('Tarea no encontrada');
+            }
+            return updatedTask;
+        }
+        catch(error){
+            throw new Error(`Error al actualizar la tarea: ${error.message}`);
         }
     }
 
